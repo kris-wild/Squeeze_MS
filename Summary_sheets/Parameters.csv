@@ -1,0 +1,11 @@
+﻿Region,Genus_species,mass (g),Diel,Climb,Burrow,Tpref,Tpref source,CTmin,CTmax,CTmin /CTmax source,ABSmin,ABSmean,ABSmax,ABS source
+Africa,Agama aculeata,31.2,diurnal,Y,N,35.8,"James & Porter, 1979",10.7,43.5,"Miles et al., unpublished",0.71,0.78,0.84,Clusella-Trullas unpublished
+,Chondrodactylus angulifer,21.2,nocturnal,N,Y,35,Assumed,11.4,38.3,"Miles et al., unpublished",0.78,0.85,0.89,Chondrodactylus bibronii; Clusella-Trullas unpublished
+,Meroles suborbitalis,5.5,diurnal,N,Y,35.5,"Miles et al., unpublished",12.5,44.1,"Miles et al., unpublished",0.83,0.92,0.97,Clusella-Trullas unpublished
+,Pedioplanis lineoocellata,5.2,diurnal,N,Y,36.3,"Miles et al., unpublished",13.4,44,"Miles et al., unpublished",0.78,0.89,0.95,Clusella-Trullas unpublished
+,Trachylepis sparsa,21.25,diurnal,Y,Y,35.8,"Miles et al., unpublished",10.6,41.1,"Miles et al., unpublished",0.68,0.82,0.9,Clusella-Trullas unpublished
+Australia,Ctenophorus isolepis,5,diurnal,N,N,39,"Light et al., 1966",7,45,Assumed,0.8,0.85,0.9,Assumed
+,Ctenotus quatt,4,diurnal,Y,Y,36.1,Dittmer 2016,7,43.5,"CT Max - Light et al., 1966_b",0.8,0.85,0.9,Assumed
+,Gehyra variegata,4,nocturnal,Y,N,35.3,"Light et al., 1966",7,46,"CT Max - Light et al., 1966_b",0.876,0.857,0.838,Gehyra australis; Christan et al. 1996
+,Moloch horridus,39,diurnal,N,Y,37.7,"Light et al., 1966",7,45,Assumed,0.8,0.85,0.9,Assumed
+,Pogona minor,36,diurnal,Y,Y,35.8,"Light et al., 1966",7,46,"CT Max - Light et al., 1966_b",0.77,0.845,0.92,"Pogona vitticeps - Smith et al., 2016"

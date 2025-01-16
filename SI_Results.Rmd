@@ -1,0 +1,713 @@
+---
+title: "SI_Wild_2024"
+author: "Kristoffer Wild"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, eval = T, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+options(digits = 3)
+rm(list=ls())
+sessionInfo()
+pacman::p_load(maps, dplyr,ggplot2, flextable, lubridate, knitr, here, stringr, broom, tibble, magick, tidyverse, cowplot)
+```
+
+# SI Figures
+```{r,echo= FALSE}
+knitr::include_graphics("./SI_Final_Figures/Fig_S1.pdf")
+```
+Fig. S1. Field site regions (A - Kalahari Desert, Africa; B - Great Victoria Desert, Australia) where data were collected and site locations where microclimate and ectotherm simulations were run.
+\newpage
+```{r,echo= FALSE}
+knitr::include_graphics("./SI_Final_Figures/Fig_S2.pdf")
+```
+Fig. S2. The relationship between observed (y axis) and predicted (x axis) field observations for air (Ta - blue) and lizard body temperatures (Tb - red)  in the Kalahari.  
+\newpage
+```{r,echo= FALSE}
+knitr::include_graphics("./SI_Final_Figures/Fig_S3.pdf")
+```
+Fig. S3. The relationship between observed (y axis) and predicted (x axis) field observations for air (Ta - blue) and lizard body temperatures (Tb - red) in the Great Victorian Desert
+\newpage
+```{r,echo= FALSE}
+### READ IN DATA:
+knitr::include_graphics("./SI_Final_Figures/Fig_S4.pdf")
+```
+Fig. S4. Average climb height (cm) or average burrow depth (cm) when comparing future climate scenarios for lizards in the Kalahari. Responses to climate warming of +2 °C and +4 °C were simulated using TerraClimate data from 1985 to 2015. Values were summarized by taking hourly mean predicted depth/height for each month under each future climate scenario (Current, +2 °C or +4 °C) for each species.  Values above zero indicate climbing behavior and values below indicate burrow behavior. Breaks in lines are from summary differences between each month.
+\newpage
+```{r,echo= FALSE}
+setwd("~/Dropbox/RWorkingDirectory/Pianka_Traits")
+knitr::include_graphics("./SI_Final_Figures/Fig_S5.pdf")
+```
+Fig. S5. Climb height (cm) or burrow depth (cm) changes when comparing future climate scenarios for lizards in the Great Victorian Desert. Responses to climate warming of +2 °C and +4 °C were simulated using TerraClimate data from 1985 to 2015. Values were summarized by taking hourly mean predicted depth/height for each month under each future climate scenario (Current, +2 °C or +4 °C) for each species.  Values above zero indicate climbing behavior and values below indicate burrow behavior. Breaks in lines are from summary differences between each month. 
+\newpage
+```{r,echo= FALSE}
+knitr::include_graphics("./SI_Final_Figures/Fig_S6.pdf")
+```
+Fig. S6. Example showing foraging activity restriction (orange) throughout the year and how the hours of restriction for each month compare from our estimates using NicheMapR (black) and the equation developed by Sinervo et al.(2) (red). In this example, we used parameters for the Australian species Ctenotus quatt. at site L and utilized the micro_global function to estimate microclimate under historical long-term average monthly conditions (1960-1990). The comparison illustrates that biophysical calculations produce similar estimates of activity restriction to those of Sinervo et al.(2) empirical function.
+\newpage
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+setwd("~/Dropbox/RWorkingDirectory/Pianka_Traits")
+knitr::include_graphics("./SI_Final_Figures/Fig_S7.pdf")
+```
+Fig. S7. Activity time (A), metabolic (B), and feeding demand (C) changes when comparing future climate scenarios for nocturnal (grey) and diurnal ectotherms in the Kalahari and the Great Victorian Desert. Responses to climate warming of +2°C (circles) and +4°C (triangles) where climate warming was simulated using TerraClimate data from 1985 to 2015. Change in response variables was derived by the overall average difference between the trait estimations under Recent  conditions and projected trait estimations under each future climate scenario (+2°C or +4°C) for each species. Feeding demand was estimated as described in Figure 3. Due to strong patterns by nocturnal species (grey color), these data were averaged for each activity pattern (nocturnal vs diurnal) across species (Figure 5). 
+
+\newpage
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+knitr::include_graphics("./SI_Final_Figures/Fig_S8.pdf")
+```
+Fig S8.Results from a simulation in which animals could burrow only to 20cm but could not thermoregulate up and down within the burrow. Historical decadal changes in calculated air temperature (Ta) and calculated body temperature of thermoregulating lizards (Tb) at field locations in the Kalahari (A) and the Great Victorian Desert (B) based on historical climate data (ERA5) between 1950 and 2020. Filled points indicate statistically significant (p <0.05) linear regressions with time. Ta and Tb data (min, mean, max) were summarized by day and then by year (top panels) or by season (bottom panels). Points are jittered for visual clarity. Values above the dashed line indicate an overall increase in the response variable with time and vice versa. 
+
+\newpage
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+knitr::include_graphics("./SI_Final_Figures/Fig_S9.pdf")
+```
+Fig S9.Results from a simulation in which animals could burrow only to 20cm but could not thermoregulate up and down within the burrow. Activity time (A), metabolic (B), and feeding demand (C) changes when comparing future climate scenarios for nocturnal (grey) and diurnal ectotherms in the Kalahari and the Great Victorian Desert. Responses to climate warming of +2°C (circles) and +4°C (triangles) where climate warming was simulated using TerraClimate data from 1985 to 2015. Change in response variables was derived by the overall average difference between the trait estimations under Recent  conditions and projected trait estimations under each future climate scenario (+2°C or +4°C) for each species. Feeding demand was estimated as described in Figure 3. Due to strong patterns by nocturnal species (grey color), these data were averaged for each activity pattern (nocturnal vs diurnal) across species (Figure 5). 
+## SI Tables
+
+**Table S1**. List of sample sizes of lizard Ta and Tb observations by species in the Kalahari (Africa) and the Great Victorian Desert (Australia). Site location shows the sample size of sites for observations (Ta and Tb) and represents how many microclimate and ectotherm models were run for that species. Formal genus names are in brackets. 
+```{r}
+#| echo: false
+# functions: 
+source(here("Scripts/Functions/Results.R"))
+# Field body temperature (Tb) and ambient temperature (Ta)observations by species and region
+Aus_Tb_data <-read.csv(here("Raw_data/Aus_Ta_Tb_Clean.csv")) %>% 
+  arrange(Genus.species) %>%
+  rename(Genus_species = Genus.species,
+         Tb = bt,
+         Ta = at,
+         Site = site) %>% 
+  mutate(dmy = dmy(date),
+         year = year(dmy),
+         year_cat = as.factor(year),
+         Year = as.numeric(as.character(year_cat)),
+         Region = "Australia") %>%
+  filter(Genus_species == "Ctenotus quatt" |
+           Genus_species == "Gehyra variegata"|
+           Genus_species == "Moloch horridus" |
+           Genus_species == "Pogona minor"|
+           Genus_species == "Ctenophorus isolepis") %>% 
+  mutate(Genus_species = str_replace(Genus_species, "^(\\w)\\w+\\s(\\w+)$", "\\1. \\2")) %>% 
+  select(Region, Site, Genus_species, Year, Tb, Ta)
+
+Kal_Tb_data <- read.csv(here(file = "Raw_data/Kal_Ta_Tb_Clean.csv")) %>% 
+  mutate(Genus.species = gsub(" ", "_", species)) %>% 
+  arrange(Genus.species) %>%
+  rename(Genus_species = Genus.species,
+         Tb = bt,
+         Ta = at,
+         Site = site) %>% 
+  mutate(dmy = dmy(date),
+         year = year(dmy),
+         year_cat = as.factor(year),
+         Year = as.numeric(as.character(year_cat)), 
+         Region = "Africa") %>%
+  filter(Genus_species == "Chondrodactylus_angulifer" |
+           Genus_species == "Trachylepis_sparsa"|
+           Genus_species == "Agama_aculeata" |
+           Genus_species == "Meroles_suborbitalis"|
+           Genus_species == "Pedioplanis_lineoocellata") %>% 
+  mutate(Genus_species = str_replace(Genus_species, "^(\\w)\\w+_(\\w+)$", "\\1. \\2")) %>% 
+  select(Region, Site, Genus_species, Year, Tb, Ta)
+
+# combinde data
+Tb_data <- rbind(Kal_Tb_data, Aus_Tb_data)
+
+## All Ta and Tb for supplementary
+Tb_Site_range_all  <- Tb_data %>%
+  group_by(Region, Site, Genus_species) %>%
+  summarize(
+    year_range = paste(min(Year, na.rm = TRUE), 
+                       max(Year, na.rm = TRUE), sep = " - "),
+    Tb_sample_size = sum(!is.na(Tb)),
+    Ta_sample_size = sum(!is.na(Ta))) %>% 
+  ungroup() %>% 
+  arrange(Region, Genus_species, desc(Tb_sample_size)) %>% 
+  filter(Tb_sample_size >= 10)
+
+## Tb data used in comparisions:
+Tb_Site_range_filtered <- Tb_Site_range_all %>%
+  filter(
+    (Genus_species == "A. aculeata" & Site %in% c("KLX", "KLB")) |
+    (Genus_species == "C. angulifer" & Site %in% c("KLA", "KLL")) |
+    (Genus_species == "M. suborbitalis" & Site %in% c("KLA", "KLT"))|
+    (Genus_species == "P. lineoocellata" & Site %in% c("KLA", "KLT")) |
+    (Genus_species == "T. sparsa" & Site %in% c("KLB", "KLK")) |
+    (Genus_species == "C. isolepis" & Site %in% c("AUSR", "AUSL")) |
+    (Genus_species == "C. quatt" & Site %in% c("AUSR", "AUSL")) |
+    (Genus_species == "G. variegata" & Site %in% c("AUSR", "AUSL")) |
+    (Genus_species == "M. horridus" & Site %in% c("AUSD", "AUSE", "AUSL")) |
+    (Genus_species == "P. minor" & Site %in% c("AUSA", "AUSI", "AUSL", "AUSR")))
+      
+# Data for Tbl 1 data
+Table_S1 <- Tb_Site_range_filtered %>%
+  group_by(Region, Genus_species) %>%
+  summarize(
+    Total_Site_Sample_Size = n(),  # Assuming each row is a unique site sample
+    Total_Tb_Sample_Size = sum(Tb_sample_size, na.rm = TRUE),
+    Total_Ta_Sample_Size = sum(Ta_sample_size, na.rm = TRUE)) %>% 
+  ungroup() 
+
+Table_S1 <- Table_S1[,c(1, 2, 3, 4, 5)]
+
+TblS1<-flextable(Table_S1) %>% 
+  italic(i = 1:10, j = 2, italic = TRUE) %>% 
+  hline(i=5, j = 1:5, part="body") %>% 
+  merge_v(j = c("Region", "Genus_species")) %>% 
+  flextable::font(part = "all", fontname = "Times New Roman") %>% 
+  set_table_properties(layout = "autofit") %>% 
+  fix_border_issues(part = "body")
+knitr::knit_print(TblS1)
+```
+
+\newpage
+**Table S3**. Relationship between observed (Ta,obs) and predicted (Ta, pred) for each species by region, summarized by correlation coefficient (r), root mean squared deviation (rmsd) and bias. 
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+source(here("Scripts/Functions/SI_functions.R"))
+Africa_diffs <- read.csv(here("output/checking Tbs/Af_Ta_Tb_check_master.csv")) %>% 
+  filter(!is.na(TA_interp) & !is.na(AT) & !is.na(TC_interp), !is.na(BT)) 
+
+Australia_diffs <- read.csv(here("output/checking Tbs/AU_Ta_Tb_check_master.csv")) %>% 
+  filter(!is.na(TA_interp) & !is.na(AT) & !is.na(TC_interp), !is.na(BT))
+   
+
+##### Table stats for Africa and Australia
+# Africa - Ta/Tb
+Africa_Ta_diffs_tbl <- get_regression(Africa_diffs, 
+                                      interp_col = "AT", 
+                                      response_col = "TA_interp") %>%
+  mutate(Region = "Africa")
+Australia_Ta_diffs_tbl <- get_regression(Australia_diffs, 
+                                      interp_col = "AT", 
+                                      response_col = "TA_interp") %>% 
+  mutate(Region = "Australia")
+
+# change pvalues to <01 if values are 0
+Table_S3 <- rbind(Africa_Ta_diffs_tbl, Australia_Ta_diffs_tbl) 
+Table_S3 <- Table_S3[,c(6, 1, 2, 3, 4, 5)]
+
+TblS3<-flextable(Table_S3) %>% 
+  italic(i = 1:12, j = 2, italic = TRUE) %>% 
+   hline(i=6, j = 1:6, part="body") %>% 
+  merge_v(j = c("Region", "Genus_species")) %>% 
+  flextable::font(part = "all", fontname = "Times New Roman") %>% 
+  set_table_properties(layout = "autofit") %>% 
+  fix_border_issues(part = "body")
+knitr::knit_print(TblS3)
+```
+
+\newpage
+**Table S4**. Relationship between observed (Tb, obs)and predicted (Tb, pred) for each species by region, summarized by correlation coefficient (r), root mean squared deviation (rmsd) and bias.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+source(here("Scripts/Functions/SI_functions.R"))
+Africa_diffs <- read.csv(here("output/checking Tbs/Af_Ta_Tb_check_master.csv")) %>% 
+  filter(!is.na(TA_interp) & !is.na(AT) & !is.na(TC_interp), !is.na(BT)) 
+
+Australia_diffs <- read.csv(here("output/checking Tbs/AU_Ta_Tb_check_master.csv")) %>% 
+  filter(!is.na(TA_interp) & !is.na(AT) & !is.na(TC_interp), !is.na(BT)) 
+
+##### Table stats for Africa and Australia
+# Africa - Ta/Tb
+Africa_Ta_diffs_tbl <- get_regression(Africa_diffs, 
+                                      interp_col = "BT", 
+                                      response_col = "TC_interp") %>%
+  mutate(Region = "Africa")
+Australia_Ta_diffs_tbl <- get_regression(Australia_diffs, 
+                                      interp_col = "BT", 
+                                      response_col = "TC_interp") %>% 
+  mutate(Region = "Australia")
+
+# change pvalues to <01 if values are 0
+Table_S4 <- rbind(Africa_Ta_diffs_tbl, Australia_Ta_diffs_tbl) 
+Table_S4 <- Table_S4[,c(6, 1, 2, 3, 4, 5)]
+
+TblS4<-flextable(Table_S4) %>% 
+  italic(i = 1:12, j = 2, italic = TRUE) %>% 
+   hline(i=6, j = 1:6, part="body") %>% 
+  merge_v(j = c("Region", "Genus_species")) %>% 
+  flextable::font(part = "all", fontname = "Times New Roman") %>% 
+  set_table_properties(layout = "autofit") %>% 
+  fix_border_issues(part = "body")
+knitr::knit_print(TblS4)
+```
+
+\newpage
+**Table S5**. Differences in estimated food requirements per hour active by diurnal and nocturnal category between regions (Kalahari Desert, Africa and Great Victoria Desert, Australia). Food requirements were calculated as ants required per hour (ants/h) for each year for each species. Food was derived by converting hourly metabolic rate into prey items (ants) based on the average energy content of a common ant Iridomyrmex spp. consumed by desert reptiles (Table 1 in (32)). The sum of ants was divided by the sum of active hours to represent feeding demand as the mean number of ants consumed per active hour (for further detail, see SI methods). Changes in food requirements were then averaged under different temperature scenarios (current, +2 °C, +4 °C) based on TerraClimate projections between 1985-2020.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+#### Ants for metabolic demand using terra climate data: current, +2, +4
+ants_per_h_active <- readRDS(here("Raw_data/ants_per_hr_active_TERRA.RDS")) %>% 
+  mutate(diel = case_when(species %in% c("C. angulifer", "G. variegata") ~ "nocturnal",
+                          TRUE ~ "diurnal")) 
+
+#############
+## Overall - ant change by diel
+overall_diel_ant_change <- ants_per_h_active %>% 
+  filter(season == "OVERALL") %>% # filter out the seasonal trends
+  group_by(Region, climate_scenario, diel) %>% 
+  summarise(ant_hr = mean(ants_hour))
+
+# Reshape the data
+overall_diel_ant_change_wide <- overall_diel_ant_change %>%
+  pivot_wider(id_cols = c("Region", "diel"),
+              names_from = c("climate_scenario"),
+              values_from = c("ant_hr"),
+              names_glue = "{climate_scenario}_{.value}") %>%
+  ungroup() %>% 
+  select(Region, diel, 
+          future_0_ant_hr,
+          future_2_ant_hr,
+           future_4_ant_hr) %>% 
+  rename(Diel = diel, 
+         'Current' = future_0_ant_hr,
+         '+2°C' = future_2_ant_hr,
+         '+4°C' = future_4_ant_hr) 
+
+############
+# final data table
+Table_S5 <- overall_diel_ant_change_wide %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)))
+TblS5 <-  flextable(Table_S5) %>% 
+  hline_top(border = fp_border_default(width = 0), 
+            part = "header") %>% 
+  hline(i =2, j = 1:5, part = "body", border = fp_border_default(width = 1)) %>% 
+  fontsize(size = 10, part = "all") %>%
+  merge_v(j = c("Region", "Diel"), part = "header") %>%
+  merge_v(j = c("Region", "Diel"), part = "body") %>%
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  set_table_properties(layout = "autofit") %>% 
+  merge_h(part = "header") %>% 
+  flextable::align(align = "center", part = "all", j = 3:5)  # Center al
+
+knitr::knit_print(TblS5)
+```
+
+\newpage
+**Table S6**. Differences in estimated food requirements per hour active by diurnal and nocturnal category for each season by region (Kalahari Desert, Africa and Great Victoria Desert, Australia). Food requirements were estimated by ants required per hour (ants/h) for each year for each species. Food was derived by converting hourly metabolic rate into prey items (ants) based on the average energy content of a common ant Iridomyrmex spp. consumed by desert reptiles (Table 1 in (32)). The sum of ants was divided by the sum of active hours to represent feeding demand as the mean number of ants consumed per active hour (for further detail, see SI methods). Changes in food requirements were then averaged under different temperature scenarios (current, +2 °C, +4 °C) based on TerraClimate projections between 1985-2020. 
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+#### Ants for metabolic demand using terra climate data: current, +2, +4
+ants_per_h_active <- readRDS(here("Raw_data/ants_per_hr_active_TERRA.RDS")) %>% 
+  mutate(diel = case_when(species %in% c("C. angulifer", "G. variegata") ~ "nocturnal",
+                          TRUE ~ "diurnal")) 
+
+# diel by season
+seasonal_diel_ant_change <- ants_per_h_active %>% 
+  filter(season != "OVERALL") %>% # filter out the annual
+  group_by(Region, climate_scenario, season, diel) %>% 
+  summarise(ant_hr = mean(ants_hour))
+
+season_diel_ant_change_wide <- seasonal_diel_ant_change %>%
+  pivot_wider(id_cols = c("Region", "diel", 'season'),
+              names_from = c("climate_scenario"),
+              values_from = c("ant_hr"),
+              names_glue = "{climate_scenario}_{.value}") %>%
+  ungroup() %>% 
+  select(Region, diel, season,
+          future_0_ant_hr, 
+          future_2_ant_hr,
+           future_4_ant_hr) %>% 
+  rename(Diel = diel, 
+         'Current' = future_0_ant_hr,
+         '+2°C' = future_2_ant_hr,
+         '+4°C' = future_4_ant_hr) %>% 
+  rename(Season = season)
+# arranging season
+season_diel_ant_change_wide$Season <- factor(season_diel_ant_change_wide$Season,
+                                                     levels = c("winter", "spring", "summer"))
+
+# Now reorder the dataframe based on the 'Season' factor
+season_diel_ant_change_wide <- season_diel_ant_change_wide %>%
+  arrange(Region, Season)
+
+
+
+#########
+# Final table
+Table_S6 <- season_diel_ant_change_wide %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)))
+
+TblS6 <- flextable(Table_S6) %>% 
+  hline_top(border = fp_border_default(width = 0), 
+            part = "header") %>% 
+  fontsize(size = 10, part = "all") %>%
+  hline(i =6, j = 1:6, part = "body", border = fp_border_default(width = 1.5)) %>% 
+  merge_v(j = c("Region", "Diel", "Season"), part = "header") %>%
+  merge_v(j = c("Region", "Diel", "Season"), part = "body") %>%
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  hline(i =c(2, 4, 8, 10), j = 1:6, part = "body") %>% 
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  flextable::align(j = 3:6, align = "center", part = "all") %>%
+  set_table_properties(layout = "autofit")
+knitr::knit_print(TblS6)
+```
+
+\newpage
+**Table S7**. Differences in estimated food requirements per hour active by species by region (Kalahari Desert, Africa and Great Victoria Desert, Australia). Food requirements were estimated by ants required per hour (ants/h) for each year for each species. Food was derived by converting hourly metabolic rate into prey items (ants) based on the average energy content of a common ant Iridomyrmex spp. consumed by desert reptiles (Table 1 in (32)). The sum of ants was divided by the sum of active hours to represent feeding demand as the mean number of ants consumed per active hour (for further detail, see SI methods). Changes in food requirements were then averaged under different temperature scenarios (current, +2 °C, +4 °C) based on TerraClimate projections between 1985-2020.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+#### Ants for metabolic demand using terra climate data: current, +2, +4
+ants_per_h_active <- readRDS(here("Raw_data/ants_per_hr_active_TERRA.RDS")) %>% 
+  mutate(diel = case_when(species %in% c("C. angulifer", "G. variegata") ~ "nocturnal",
+                          TRUE ~ "diurnal")) 
+
+
+#############
+overall_spp_ant_change <- ants_per_h_active %>% 
+  filter(season == "OVERALL") %>% # filter out the seasonal trends
+  group_by(Region, climate_scenario, diel, species) %>% 
+  summarise(ant_hr = mean(ants_hour))
+
+# Reshape the data
+overall_diel_ant_change_wide <- overall_spp_ant_change %>%
+  pivot_wider(id_cols = c("Region", "species", "diel"),
+              names_from = c("climate_scenario"),
+              values_from = c("ant_hr"),
+              names_glue = "{climate_scenario}_{.value}") %>%
+  ungroup() %>% 
+  select(Region, species, diel, 
+         future_0_ant_hr, 
+         future_2_ant_hr,
+         future_4_ant_hr) %>% 
+  rename(Diel = diel, 
+         'Current' = future_0_ant_hr,
+         '+2°C' = future_2_ant_hr,
+         '+4°C' = future_4_ant_hr) 
+
+############
+# final data table
+Table_S7 <- overall_diel_ant_change_wide %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)))
+TblS7 <-  flextable(Table_S7) %>% 
+  fontsize(size = 10, part = "all") %>%
+  italic(i = c(1:10), j = 2, part = "body") %>%   
+  hline(i =5, j = 1:6, part = "body", border = fp_border_default(width = 1.5)) %>% 
+  merge_v(j = c("Region"), part = "header") %>%
+  merge_v(j = c("Region"), part = "body") %>%
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  flextable::align(j = 3:6, align = "center", part = "all") %>%
+  set_table_properties(layout = "autofit") 
+knitr::knit_print(TblS7)
+```
+
+
+
+\newpage
+**Table S8**. Differences in estimated food requirements per hour active by species for each season in Kalahari. Food requirements were estimated by ants required per hour (ants/h) for each year for each species. Food was derived by converting hourly metabolic rate into prey items (ants) based on the average energy content of a common ant Iridomyrmex spp. consumed by desert reptiles (Table 1 in (32)). The sum of ants was divided by the sum of active hours to represent feeding demand as the mean number of ants consumed per active hour (for further detail, see SI methods). Changes in food requirements were then averaged under different temperature scenarios (current, +2 °C, +4 °C) based on TerraClimate projections between 1985-2020.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+#### Ants for metabolic demand using terra climate data: current, +2, +4
+ants_per_h_active <- readRDS(here("Raw_data/ants_per_hr_active_TERRA.RDS")) %>% 
+  mutate(diel = case_when(species %in% c("C. angulifer", "G. variegata") ~ "nocturnal",
+                          TRUE ~ "diurnal")) 
+
+#############
+## seasonal ant change by species 
+africa_season_spp_ant_change <- ants_per_h_active %>% 
+  filter(season != "OVERALL") %>% # filter out the seasonal trends
+  group_by(Region, climate_scenario, diel, species, season) %>% 
+  summarise(ant_hr = mean(ants_hour))  %>% 
+  filter(Region == "Africa")
+
+# wide data for table
+africa_seasonal_spp_ant_change_wide <- africa_season_spp_ant_change %>%
+  pivot_wider(id_cols = c("Region", "species", "season",  "diel"),
+              names_from = c("climate_scenario"),
+              values_from = c("ant_hr"),
+              names_glue = "{climate_scenario}_{.value}") %>%
+  ungroup() %>% 
+  select(species, season, diel,
+         future_0_ant_hr, 
+         future_2_ant_hr,
+         future_4_ant_hr) %>% 
+  rename(Season = season, 
+         Species = species,
+         Diel = diel, 
+         'Current' = future_0_ant_hr,
+         '+2°C' = future_2_ant_hr,
+         '+4°C' = future_4_ant_hr) 
+# arranging season
+africa_seasonal_spp_ant_change_wide$Season <- factor(africa_seasonal_spp_ant_change_wide$Season,
+                                                     levels = c("winter", "spring", "summer"))
+
+# Now reorder the dataframe based on the 'Season' factor
+africa_seasonal_spp_ant_change_wide <- africa_seasonal_spp_ant_change_wide %>%
+  arrange(Species, Season)
+
+
+#########
+# Final table
+TableS8 <- africa_seasonal_spp_ant_change_wide %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)))
+
+TblS8 <- flextable(TableS8) %>% 
+  fontsize(size = 10, part = "all") %>%
+  italic(i = c(1:15), j = 1, part = "body") %>%   
+  hline(i =c(3,6,9,12), j = 1:6, part = "body") %>% 
+  merge_v(j = c("Species"), part = "header") %>%
+  merge_v(j = c("Species"), part = "body") %>%
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  flextable::align(j = 3:6, align = "center", part = "all") %>%
+  set_table_properties(layout = "autofit")
+knitr::knit_print(TblS8)
+```
+
+
+\newpage
+**Table S9**. Differences in estimated food requirements per hour active by species for each season in Australia. Food requirements were estimated by ants required per hour (ants/h) for each year for each species. Food was derived by converting hourly metabolic rate into prey items (ants) based on the average energy content of a common ant Iridomyrmex spp. consumed by desert reptiles (Table 1 in (32)). The sum of ants was divided by the sum of active hours to represent feeding demand as the mean number of ants consumed per active hour (for further detail, see SI methods). Changes in food requirements were then averaged under different temperature scenarios (current, +2 °C, +4 °C) based on TerraClimate projections between 1985-2020.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+#### Ants for metabolic demand using terra climate data: current, +2, +4
+ants_per_h_active <- readRDS(here("Raw_data/ants_per_hr_active_TERRA.RDS")) %>% 
+  mutate(diel = case_when(species %in% c("C. angulifer", "G. variegata") ~ "nocturnal",
+                          TRUE ~ "diurnal")) 
+
+#############
+## seasonal ant change by species 
+australia_season_spp_ant_change <- ants_per_h_active %>% 
+  filter(season != "OVERALL") %>% # filter out the seasonal trends
+  group_by(Region, climate_scenario, diel, species, season) %>% 
+  summarise(ant_hr = mean(ants_hour))  %>% 
+  filter(Region == "Australia")
+
+# wide data for table
+australia_seasonal_spp_ant_change_wide <- australia_season_spp_ant_change %>%
+  pivot_wider(id_cols = c("Region", "species", "season",  "diel"),
+              names_from = c("climate_scenario"),
+              values_from = c("ant_hr"),
+              names_glue = "{climate_scenario}_{.value}") %>%
+  ungroup() %>% 
+  select(species, season, diel,
+         future_0_ant_hr, 
+         future_2_ant_hr,
+         future_4_ant_hr) %>% 
+  rename(Season = season, 
+         Species = species,
+         Diel = diel, 
+         'Current' = future_0_ant_hr,
+         '+2°C' = future_2_ant_hr,
+         '+4°C' = future_4_ant_hr) 
+# arranging season
+australia_seasonal_spp_ant_change_wide$Season <- factor(australia_seasonal_spp_ant_change_wide$Season,
+                                                     levels = c("winter", "spring", "summer"))
+
+# Now reorder the dataframe based on the 'Season' factor
+australia_seasonal_spp_ant_change_wide <- australia_seasonal_spp_ant_change_wide %>%
+  arrange(Species, Season)
+
+
+#########
+# Final table
+TableS9 <- australia_seasonal_spp_ant_change_wide %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)))
+
+TblS9 <- flextable(TableS9) %>% 
+  hline_top(border = fp_border_default(width = 0), 
+            part = "header") %>% 
+  fontsize(size = 10, part = "all") %>%
+  italic(i = c(1:15), j = 1, part = "body") %>%   
+  hline(i =c(3,6,9,12), j = 1:6, part = "body") %>% 
+  merge_v(j = c("Species"), part = "header") %>%
+  merge_v(j = c("Species"), part = "body") %>%
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  flextable::align(j = 3:6, align = "center", part = "all") %>%
+  set_table_properties(layout = "autofit")
+knitr::knit_print(TblS9)
+```
+\newpage
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE 
+## Data:
+##########################  ##########################  ##########################
+# Current simulations (TB & Squeeze parameters) - This is what we have with assumed parameters
+### Overall TB
+contemp_ta_tb_australia <- readRDS(here("Raw_data/contemp_ta_tb_australia.rds")) %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  filter(Variable == 'Mean Tb') %>% 
+  rename(Test = Variable) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = 'CTmin_max_assumed') %>% 
+  select(Species,Analysis, Measure, Test, Slope_10_Year, P_value)
+
+### ACT, MRATE, Foraging overall
+ACT_MRate_Foraging_contemp <- readRDS(here("Raw_data/ACT_MRate_Foraging_contemp.rds")) %>% 
+  filter(Species != "Overall") %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = 'CTmin_max_assumed') %>% 
+  select(Species, Analysis, Measure,Test, Slope_10_Year, P_value)
+
+
+
+##########################  ##########################  ##########################
+# CTmax -2 (TB & Squeeze parameters) 43C
+contemp_ta_tb_australia_CTmax_43 <- readRDS(here("Raw_data/contemp_ta_tb_australia_C_quatt_CTmax_43.RDS")) %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  filter(Variable == 'Mean Tb') %>% 
+  rename(Test = Variable) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '-2') %>% 
+  select(Species,Analysis, Measure,  Test, Slope_10_Year, P_value)
+### ACT, MRATE, Foraging overall
+ACT_MRate_Foraging_contemp_CTmax_43 <- readRDS(here("Raw_data/ACT_MRate_Foraging_contemp_C_quatt_CTmax_43.rds")) %>% 
+  filter(Species != "Overall") %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '-2') %>% 
+  select(Species, Analysis, Measure,Test, Slope_10_Year, P_value)
+
+##########################  ##########################  ##########################
+# CTmax +2 (TB & Squeeze parameters) 47C
+contemp_ta_tb_australia_CTmax_47 <- readRDS(here("Raw_data/contemp_ta_tb_australia_C_quatt_CTmax_47.RDS")) %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  filter(Variable == 'Mean Tb') %>% 
+  rename(Test = Variable) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '+2') %>% 
+  select(Species,Analysis,Measure,  Test, Slope_10_Year, P_value)
+
+### ACT, MRATE, Foraging overall
+ACT_MRate_Foraging_contemp_CTmax_47 <- readRDS(here("Raw_data/ACT_MRate_Foraging_contemp_C_quatt_CTmax_47.rds")) %>% 
+  filter(Species != "Overall") %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '+2') %>% 
+  select(Species, Analysis, Measure,Test, Slope_10_Year, P_value)
+
+
+##########################  ##########################  ##########################
+# CTmin -2 (TB & Squeeze parameters) 6.7C
+contemp_ta_tb_australia_CTmin_6_7 <- readRDS(here("Raw_data/contemp_ta_tb_australia_C_quatt_CTmin_6_7.RDS")) %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  filter(Variable == 'Mean Tb') %>% 
+  rename(Test = Variable) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '-2') %>% 
+  select(Species,Analysis,Measure,  Test, Slope_10_Year, P_value)
+
+### ACT, MRATE, Foraging overall
+ACT_MRate_Foraging_contemp_CTmin_6_7 <- readRDS(here("Raw_data/ACT_MRate_Foraging_contemp_C_quatt_CTmin_6_7.rds")) %>% 
+  filter(Species != "Overall") %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '-2') %>% 
+  select(Species, Analysis, Measure,Test, Slope_10_Year, P_value)
+
+
+##########################  ##########################  ##########################
+# CTmin +2 (TB & Squeeze parameters) 10.7C
+contemp_ta_tb_australia_CTmin_10_7 <- readRDS(here("Raw_data/contemp_ta_tb_australia_C_quatt_CTmin_10_7.RDS")) %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  filter(Variable == 'Mean Tb') %>% 
+  rename(Test = Variable) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '+2') %>% 
+  select(Species,Analysis,Measure,  Test, Slope_10_Year, P_value)
+
+### ACT, MRATE, Foraging overall
+ACT_MRate_Foraging_contemp_CTmin_10_7 <- readRDS(here("Raw_data/ACT_MRate_Foraging_contemp_C_quatt_CTmin_10_7.rds")) %>% 
+  filter(Species != "Overall") %>% 
+  filter(Species %in% c('C. quatt')) %>% 
+  mutate(Measure = 'OVERALL',
+         Analysis = '+2') %>% 
+  select(Species, Analysis, Measure,Test, Slope_10_Year, P_value)
+
+
+
+
+############
+# Final tables for CTmin & Max
+C_quatt_CTmin <-rbind(contemp_ta_tb_australia_CTmin_6_7, 
+                      contemp_ta_tb_australia,
+                      contemp_ta_tb_australia_CTmin_10_7,
+                      ACT_MRate_Foraging_contemp_CTmin_6_7,
+                      ACT_MRate_Foraging_contemp,
+                      ACT_MRate_Foraging_contemp_CTmin_10_7) %>% 
+  mutate(Analysis = ifelse(Analysis == "CTmin_max_assumed", 
+                           "CTmin", Analysis)) %>%
+  mutate(Parameter = "CTmin") %>% 
+  mutate(Test = factor(Test, levels = c("Mean Tb", "ACT", "M_Rate", "Feeding_demand")),
+         Analysis = factor(Analysis, levels = c("-2", "CTmin", "+2"))) %>%
+  arrange(Test, Analysis) %>% 
+  select(Parameter, Test, Analysis, Slope_10_Year, P_value)
+
+
+C_quatt_CTmax <-rbind(contemp_ta_tb_australia_CTmax_43, 
+                      contemp_ta_tb_australia,
+                      contemp_ta_tb_australia_CTmax_47,
+                      ACT_MRate_Foraging_contemp_CTmax_43,
+                      ACT_MRate_Foraging_contemp,
+                      ACT_MRate_Foraging_contemp_CTmax_47) %>% 
+  mutate(Analysis = ifelse(Analysis == "CTmin_max_assumed", 
+                           "CTmax", Analysis)) %>% 
+  mutate(Parameter = "CTmax") %>% 
+  mutate(Test = factor(Test, levels = c("Mean Tb", "ACT", "M_Rate", "Feeding_demand")),
+         Analysis = factor(Analysis, levels = c("-2", "CTmax", "+2"))) %>%
+  arrange(Test, Analysis) %>% 
+  select(Parameter, Test, Analysis, Slope_10_Year, P_value)
+
+
+####################
+# Final table
+TableS10 <- rbind(C_quatt_CTmin,
+                  C_quatt_CTmax)
+TableS10 <- flextable(TableS10) %>% 
+  hline_top(border = fp_border_default(width = 0), 
+            part = "header") %>% 
+  fontsize(size = 10, part = "all") %>%  
+  hline(i =c(12), j = 1:5, part = "body") %>% 
+  merge_v(j = c('Parameter', "Test"), part = "header") %>%
+  merge_v(j = c('Parameter',"Test"), part = "body") %>%
+  hline(i =c(3,6,9,15,18,21), j = 2:5, part = "body") %>% 
+  flextable::font(part = "all", fontname = "Times New Roman") %>%
+  set_table_properties(layout = "autofit") %>%
+  fix_border_issues(part = "body") %>%
+  #flextable::align(j = 3:6, align = "center", part = "all") %>%
+  set_table_properties(layout = "autofit")
+
+knitr::knit_print(TableS10)
+```

@@ -1,0 +1,8 @@
+"","species","region","abs_mean","abs_min","abs_max","sdev","n"
+"1","Agama aculeata aculeata","dorsal",0.815555555555556,0.79,0.84,0.02185812841434,9
+"2","Chondrodactylus bibroni","dorsal",0.888260869565217,0.88,0.9,0.00650326764931116,23
+"3","Meroles suborbitalis","dorsal",0.950909090909091,0.92,0.98,0.0128328210349782,88
+"4","Pedioplanis lineocellata","dorsal",0.917139959432049,0.77,0.95,0.0222635426402147,493
+"5","Agama aculeata aculeata","ventral",0.71,0.71,0.71,0,3
+"6","Meroles suborbitalis","ventral",0.865151515151515,0.78,0.91,0.031733382671212,33
+"7","Pedioplanis lineocellata","ventral",0.847669902912621,0.71,0.9,0.0344765872104064,103

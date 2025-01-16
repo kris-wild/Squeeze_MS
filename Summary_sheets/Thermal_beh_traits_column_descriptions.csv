@@ -1,0 +1,26 @@
+﻿Column name,Column discription
+Genus ,Genera of taxa 
+species,Species of taxa
+mass_g,mean mass of animals that Tb was measured
+diel,"actvity of animal (diurnal, crepuscular, nocturnal)"
+Climb(Y_N),does the animal climb at any point of the year (Yes/No)
+Climb_height_cm,height of animal if it climbs
+Burrow(Y_N),does the animal use burrows at any point of the year (Yes/No)
+Tb_n,pooled sample size of observed Tb's from the field data (not including site)
+Tset(Y_N),is Tset for this species known (Yes/No)
+Tset_method,"method of collecting Tset (gradient, field)"
+Tset_est,"mean, median (deg C)"
+Tset ,Tset estimate 
+Lower_Tset,Q1 of Tset (deg C)
+Upper_Tset,Q3of Tset (deg C)
+Range_lower,lower range of Tb (deg C) measured for Tset(eg: minimum Tb from Tset)
+Range_upper,upper range of Tb (deg C) measured for Tset (eg: minimum Tb from Tset)
+T_F_min,minimum feeding/foraging body temperature (deg C)
+T_F_max,maximum feeding/foraging body temperature (deg C)
+T_RB_min,minimum emergence (retreat to bask) body temperature (deg C) observed in field
+CT_min,critical thermal minimum (deg C)
+CT_max,critical thermal maximum (deg C)
+ABSMIN,minimum solar absorptivity (0-1)
+ABSMAX,maximum solar absorptivity (0-1)
+ABSMEAN,mean solar absorptivity (0-1)
+_ref,reference for any trait mentioned
